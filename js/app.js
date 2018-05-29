@@ -1,3 +1,15 @@
+// Fisher-Yates shuffle function from https://bost.ocks.org/mike/shuffle/. Modified to use ES2015.
+function shuffle(array) {
+    let curr = array.length, temp, rand;
+
+    while (curr !== 0) {
+        rand = Math.floor(Math.random() * curr--);
+        [array[curr], array[rand]] = [array[rand], array[curr]];
+    }
+
+    return array;
+}
+
 /*
  * Create a list that holds all of your cards
  */
@@ -11,19 +23,14 @@ let cards = ['fa-diamond', 'fa-diamond', 'fa-paper-plane-o', 'fa-paper-plane-o',
  */
 cards = shuffle(cards);
 console.log(cards);
-
-// Fisher-Yates shuffle function from https://bost.ocks.org/mike/shuffle/. Modified to use ES2015.
-function shuffle(array) {
-    let curr = array.length, temp, rand;
-
-    while (curr !== 0) {
-        rand = Math.floor(Math.random() * curr--);
-        [array[curr], array[rand]] = [array[rand], array[curr]];
-    }
-
-    return array;
+let cardFrag = document.createDocumentFragment();
+for (let i = 0; i < cards.length; i++) {
+    let card = document.createElement('li');
+    card.setAttribute('class', 'card');
+    card.innerHTML = `<i class="fa ${cards[i]}"></i>`;
+    cardFrag.appendChild(card);
 }
-
+document.querySelector('ul.deck').appendChild(cardFrag);
 
 /*
  * set up the event listener for a card. If a card is clicked:
