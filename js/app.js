@@ -1,6 +1,7 @@
 // Fisher-Yates shuffle function from https://bost.ocks.org/mike/shuffle/. Modified to use ES2015.
 function shuffle(array) {
-    let curr = array.length, temp, rand;
+    let curr = array.length,
+        temp, rand;
 
     while (curr !== 0) {
         rand = Math.floor(Math.random() * curr--);
@@ -22,7 +23,6 @@ let cards = ['fa-diamond', 'fa-diamond', 'fa-paper-plane-o', 'fa-paper-plane-o',
  *   - add each card's HTML to the page
  */
 cards = shuffle(cards);
-console.log(cards);
 let cardFrag = document.createDocumentFragment();
 for (let i = 0; i < cards.length; i++) {
     let card = document.createElement('li');
@@ -42,3 +42,62 @@ document.querySelector('ul.deck').appendChild(cardFrag);
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+let deck = document.querySelector('ul.deck'),
+    openCards = [],
+    remainingCards = 16,
+    moves = 0;
+
+deck.addEventListener('click', function (e) {
+    // console.log(e.target.innerHTML);
+    if (e.target.classList.contains('show') ||
+        e.target.classList.contains('open') ||
+        openCards.length > 1 ||
+        e.target.tagName == 'UL') {
+        return;
+    }
+    turnOver(e.target);
+    addToOpen(e.target);
+});
+
+function turnOver(element) {
+    element.classList.add('open');
+}
+
+function addToOpen(element) {
+    openCards.push(element);
+    if (openCards.length > 1) {
+        setTimeout(compareCards, 2000);
+    }
+}
+
+function compareCards() {
+    if (openCards[0].innerHTML === openCards[1].innerHTML) {
+        for (let card of openCards) {
+            card.classList.toggle('match');
+        }
+        remainingCards -= 2;
+        if (remainingCards === 0) {
+            gameOver();
+        }
+    }
+
+    for (let card of openCards) {
+        card.classList.remove('open');
+    }
+    openCards = [];
+    updateCounter();
+}
+
+function updateCounter() {
+    moves++;
+    document.querySelector('.moves').textContent = moves;
+
+    if ([1, 2, 3, 4].includes(moves)) {
+        document.querySelector('.stars').firstElementChild.remove();
+    }
+}
+
+function gameOver() {
+
+}
