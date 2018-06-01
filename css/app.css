@@ -81,11 +81,7 @@ h1 {
 
 .deck .card.no-match {
     cursor: default;
-<<<<<<< HEAD
     background: #ca2e55;
-=======
-    background: #0c9c43;
->>>>>>> 64b149e6240cd21284ebc26c3eccb2f3118b50a0
     font-size: 33px;
 }
 
