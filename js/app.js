@@ -1,3 +1,5 @@
+window.onload = loadGame;
+
 // Fisher-Yates shuffle function from https://bost.ocks.org/mike/shuffle/. Modified to use ES2015.
 function shuffle(array) {
     let curr = array.length,
@@ -22,15 +24,18 @@ let cards = ['fa-diamond', 'fa-diamond', 'fa-paper-plane-o', 'fa-paper-plane-o',
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-cards = shuffle(cards);
-let cardFrag = document.createDocumentFragment();
-for (let i = 0; i < cards.length; i++) {
-    let card = document.createElement('li');
-    card.setAttribute('class', 'card');
-    card.innerHTML = `<i class="fa ${cards[i]}"></i>`;
-    cardFrag.appendChild(card);
+
+function loadGame() {
+    cards = shuffle(cards);
+    let cardFrag = document.createDocumentFragment();
+    for (let i = 0; i < cards.length; i++) {
+        let card = document.createElement('li');
+        card.setAttribute('class', 'card');
+        card.innerHTML = `<i class="fa ${cards[i]}"></i>`;
+        cardFrag.appendChild(card);
+    }
+    document.querySelector('ul.deck').appendChild(cardFrag);
 }
-document.querySelector('ul.deck').appendChild(cardFrag);
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -60,6 +65,14 @@ deck.addEventListener('click', function (e) {
     addToOpen(e.target);
 });
 
+document.querySelector('.restart').addEventListener('click', function () {
+    deck.innerHTML = '';
+    moves = 0;
+    document.querySelector('.moves').textContent = moves;
+    document.querySelector('.stars').innerHTML = '<li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>';
+    loadGame();
+});
+
 function turnOver(element) {
     element.classList.add('open');
 }
@@ -67,23 +80,29 @@ function turnOver(element) {
 function addToOpen(element) {
     openCards.push(element);
     if (openCards.length > 1) {
-        setTimeout(compareCards, 2000);
+        setTimeout(compareCards, 1000);
     }
 }
 
 function compareCards() {
-    if (openCards[0].innerHTML === openCards[1].innerHTML) {
-        for (let card of openCards) {
-            card.classList.toggle('match');
+    setTimeout(function () {
+        if (openCards[0].innerHTML === openCards[1].innerHTML) {
+            for (let card of openCards) {
+                card.classList.toggle('match');
+            }
+            remainingCards -= 2;
+            if (remainingCards === 0) {
+                gameOver();
+            }
+        } else {
+            for (let card of openCards) {
+                card.classList.add('no-match');
+            }
         }
-        remainingCards -= 2;
-        if (remainingCards === 0) {
-            gameOver();
-        }
-    }
+    }, 1000);
 
     for (let card of openCards) {
-        card.classList.remove('open');
+        card.classList.remove('open', 'no-match');
     }
     openCards = [];
     updateCounter();
