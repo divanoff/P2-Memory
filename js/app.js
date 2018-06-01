@@ -85,24 +85,18 @@ function addToOpen(element) {
 }
 
 function compareCards() {
-    setTimeout(function () {
-        if (openCards[0].innerHTML === openCards[1].innerHTML) {
-            for (let card of openCards) {
-                card.classList.toggle('match');
-            }
-            remainingCards -= 2;
-            if (remainingCards === 0) {
-                gameOver();
-            }
-        } else {
-            for (let card of openCards) {
-                card.classList.add('no-match');
-            }
+    if (openCards[0].innerHTML === openCards[1].innerHTML) {
+        for (let card of openCards) {
+            card.classList.toggle('match');
         }
-    }, 1000);
+        remainingCards -= 2;
+        if (remainingCards === 0) {
+            gameOver();
+        }
+    }
 
     for (let card of openCards) {
-        card.classList.remove('open', 'no-match');
+        card.classList.remove('open');
     }
     openCards = [];
     updateCounter();
