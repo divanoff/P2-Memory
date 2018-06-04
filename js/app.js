@@ -79,18 +79,7 @@ deck.addEventListener('click', function (e) {
     addToOpen(e.target);
 });
 
-restart.addEventListener('click', function () {
-    deck.innerHTML = '';
-    moves = 0;
-    remainingPairs = 8;
-    document.querySelector('.moves').textContent = moves;
-    document.querySelector('.stars').innerHTML = '';
-    for (let i = 0; i < 5; i++) {
-        document.querySelector('.stars').innerHTML += '<li>\n<i class="fa fa-star"></i>\n</li>';
-    }
-    resetTimer();
-    loadGame();
-});
+restart.addEventListener('click', reloadGame);
 
 function turnOver(element) {
     element.classList.add('open');
@@ -111,6 +100,7 @@ function addToOpen(element) {
  * - Empty the open cards array and update the move counter
  */
 function compareCards() {
+    updateCounter();
     if (openCards[0].innerHTML === openCards[1].innerHTML) {
         for (let card of openCards) {
             card.classList.toggle('match');
@@ -126,7 +116,6 @@ function compareCards() {
         card.classList.remove('open');
     }
     openCards = [];
-    updateCounter();
 }
 
 // Update the move counter and the star rating
@@ -134,7 +123,14 @@ function updateCounter() {
     moves++;
     document.querySelector('.moves').textContent = moves;
 
-    if ([10, 12, 15, 20].includes(moves)) {
+    /**
+     * up to 10 moves - 5 stars
+     * 11-12 moves - 4 stars
+     * 13-15 moves - 3 stars
+     * 16-20 moves - 2 stars
+     * 21+ moves - 1 star
+     */
+    if ([11, 13, 16, 21].includes(moves)) {
         document.querySelector('.stars').firstElementChild.remove();
     }
 }
@@ -155,8 +151,8 @@ function gameOver() {
     popMsg.classList.add('modal-message');
     popMsg.innerHTML = `<h2>Congratulations!!!</h2>`;
     popMsg.innerHTML += `<p>You won in ${moves} moves.</p>`;
-    popMsg.innerHTML += `<p>It took you ${Math.floor((endTime - startTime) / 60000)} minute(s) and ${Math.round(((endTime - startTime) / 1000) % 60)} second(s).</p>`
-    popMsg.innerHTML += `<p>Your rating is ${document.querySelector('.stars').children.length} stars.</p>`;
+    popMsg.innerHTML += `<p>It took you ${Math.floor((endTime - startTime) / 60000)} minute(s) and ${Math.floor(((endTime - startTime) / 1000) % 60)} second(s).</p>`
+    popMsg.innerHTML += `<p>Your rating is ${document.querySelector('.stars').children.length} star(s).</p>`;
     popMsg.innerHTML += `<h3>Do you want to play again?</h3>`;
     popMsg.innerHTML += `<button class="modal-button yes">Yes</button>`;
     popMsg.innerHTML += `<button class="modal-button no">No</button>`;
@@ -166,8 +162,7 @@ function gameOver() {
 
     document.querySelector('.yes').addEventListener('click', function () {
         popup.remove();
-        deck.innerHTML = '';
-        loadGame();
+        reloadGame();
     });
 
     document.querySelector('.no').addEventListener('click', function () {
@@ -181,7 +176,7 @@ function startTimer() {
         startTime = Date.now();
         timer = setInterval(function () {
             let minutes = Math.floor((Date.now() - startTime) / 60000),
-                seconds = Math.round(((Date.now() - startTime) / 1000) % 60);
+                seconds = Math.floor(((Date.now() - startTime) / 1000) % 60);
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
             document.querySelector('.timer').innerHTML = `${minutes}:${seconds}`;
@@ -204,4 +199,17 @@ function stopTimer() {
 function resetTimer() {
     stopTimer();
     document.querySelector('.timer').innerHTML = '00:00';
+}
+
+function reloadGame() {
+    deck.innerHTML = '';
+    moves = 0;
+    remainingPairs = 8;
+    document.querySelector('.moves').textContent = moves;
+    document.querySelector('.stars').innerHTML = '';
+    for (let i = 0; i < 5; i++) {
+        document.querySelector('.stars').innerHTML += '<li>\n<i class="fa fa-star"></i>\n</li>';
+    }
+    resetTimer();
+    loadGame();
 }
