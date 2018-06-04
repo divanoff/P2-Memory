@@ -204,6 +204,7 @@ function resetTimer() {
 function reloadGame() {
     deck.innerHTML = '';
     moves = 0;
+    openCards = [];
     remainingPairs = 8;
     document.querySelector('.moves').textContent = moves;
     document.querySelector('.stars').innerHTML = '';
