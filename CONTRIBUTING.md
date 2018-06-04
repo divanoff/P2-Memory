@@ -1,3 +1,3 @@
 # How to contribute
 
-The files in this repository are used as the starting point for all students. Because we want students to write the majority of the code themselves, pull requests (most likely) will _not_ be merged into the project.
+If you see a bug you'd like to fix or an improvement you would like to implement, please send an email to divanoff@gmail.com with a short description. 
