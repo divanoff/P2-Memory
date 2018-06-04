@@ -111,3 +111,52 @@ h1 {
     float: right;
     cursor: pointer;
 }
+
+/* 
+ * Styles for the modal pop-up
+ */
+
+.modal {
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.modal-message {
+    background: #fcde9c;
+    color: #ca2e55;
+    margin: 200px auto;
+    width: 400px;
+    height: 300px;
+    border-radius: 20px;
+    border: 5px solid #0c9c43;
+    text-align: center;
+}
+
+.modal-button {
+    width: 70px;
+    height: 40px;
+    text-align: center;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: inherit;
+    color: #011627;
+    margin: 0 20px;
+    cursor: pointer;
+}
+
+.yes {
+    background: #0c9c43;
+}
+
+.no {
+    background: #ca2e55;
+}
+
+.timer {
+    margin-left: 50px;
+}
