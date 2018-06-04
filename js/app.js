@@ -88,6 +88,7 @@ function turnOver(element) {
 function addToOpen(element) {
     openCards.push(element);
     if (openCards.length > 1) {
+        updateCounter();
         setTimeout(compareCards, 1000);
     }
 }
@@ -100,7 +101,6 @@ function addToOpen(element) {
  * - Empty the open cards array and update the move counter
  */
 function compareCards() {
-    updateCounter();
     if (openCards[0].innerHTML === openCards[1].innerHTML) {
         for (let card of openCards) {
             card.classList.toggle('match');
